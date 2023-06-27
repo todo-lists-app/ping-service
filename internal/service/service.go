@@ -1,0 +1,116 @@
+package service
+
+import (
+	"fmt"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
+	"github.com/keloran/go-healthcheck"
+	"github.com/todo-lists-app/ping-service/internal/ping"
+	"github.com/todo-lists-app/ping-service/internal/validate"
+	"net/http"
+	"os"
+	"time"
+
+	"github.com/todo-lists-app/ping-service/internal/config"
+)
+
+type Service struct {
+	*config.Config
+}
+
+func NewService(cfg *config.Config) *Service {
+	return &Service{
+		Config: cfg,
+	}
+}
+
+func (s *Service) Start() error {
+	errChan := make(chan error)
+	go startHTTP(s.Config, errChan)
+	// go startGRPC(s.Config, errChan)
+
+	return <-errChan
+}
+
+func (s *Service) Health() error {
+	os.Exit(0)
+	return nil
+}
+
+func startHTTP(cfg *config.Config, errChan chan error) {
+	allowedOrigins := []string{
+		"http://localhost:3000",
+		"https://api.todo-list.app",
+		"https://todo-list.app",
+		"https://beta.todo-list.app",
+	}
+
+	if cfg.Local.Development {
+		allowedOrigins = append(allowedOrigins, "http://*")
+	}
+
+	r := chi.NewRouter()
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: allowedOrigins,
+		AllowedMethods: []string{
+			"GET",
+			"OPTIONS",
+		},
+		AllowedHeaders: []string{
+			"Accept",
+			"Authorization",
+			"Content-Type",
+			"X-CSRF-Token",
+			"X-User-Subject",
+		},
+		MaxAge: 300,
+	}))
+	r.Get("/health", healthcheck.HTTP)
+
+	r.Route("/ping", func(r chi.Router) {
+		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+			subject := r.Header.Get("X-User-Subject")
+			if subject == "" {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+			v := validate.NewValidate(cfg, r.Context())
+			valid, err := v.ValidateUser(subject)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				errChan <- err
+				return
+			}
+			if !valid {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+
+			p := ping.NewPingService(r.Context(), *cfg, subject)
+			if err := p.Ping(); err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				errChan <- err
+				return
+			}
+
+			w.WriteHeader(http.StatusOK)
+			return
+		})
+	})
+
+	srv := &http.Server{
+		Addr:              fmt.Sprintf(":%d", cfg.Local.HTTPPort),
+		Handler:           r,
+		ReadTimeout:       5 * time.Second,
+		ReadHeaderTimeout: 10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       15 * time.Second,
+	}
+	if err := srv.ListenAndServe(); err != nil {
+		errChan <- err
+	}
+}
+
+func startGRPC(cfg *config.Config, errChan chan error) {
+	errChan <- nil
+}
