@@ -13,7 +13,7 @@ ARG BUILD
 ARG VERSION
 ARG SERVICE_NAME
 
-RUN go build -ldflags "-w -s -X main.BuildVersion=${VERSION} -X main.BuildHash=${BUILD} -X main.ServiceName=${SERVICE_NAME}" -o ./bin/service -v ./cmd/service.go
+RUN go build -ldflags "-w -s -X main.BuildVersion=${VERSION} -X main.BuildHash=${BUILD} -X main.ServiceName=${SERVICE_NAME}" -o ./bin/service -v ./cmd/${SERVICE_NAME}/service.go
 RUN cp ./bin/service
 
 # Runner
