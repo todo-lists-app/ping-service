@@ -66,6 +66,11 @@ spec:
                 secretKeyRef:
                   name: ping-service-secrets
                   key: vault-host
+            - name: MONGO_VAULT_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: ping-service-secrets
+                  key: mongo-vault-path
 
 ---
 apiVersion: v1
