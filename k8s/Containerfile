@@ -19,6 +19,7 @@ RUN cp ./bin/service /
 
 # Runner
 FROM scratch
+RUN mkdir -p /bin
 COPY --from=builder /service /bin/
 EXPOSE 80 3000
 HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD ["/bin/service", "health"]
