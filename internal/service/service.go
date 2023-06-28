@@ -2,16 +2,21 @@ package service
 
 import (
 	"fmt"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/cors"
-	"github.com/keloran/go-healthcheck"
-	"github.com/todo-lists-app/ping-service/internal/ping"
-	"github.com/todo-lists-app/ping-service/internal/validate"
+	"github.com/bugfixes/go-bugfixes/logs"
+	"net"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
+	"github.com/keloran/go-healthcheck"
 	"github.com/todo-lists-app/ping-service/internal/config"
+	"github.com/todo-lists-app/ping-service/internal/ping"
+	"github.com/todo-lists-app/ping-service/internal/validate"
+	pb "github.com/todo-lists-app/protobufs/generated/ping/v1"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 type Service struct {
@@ -27,7 +32,7 @@ func NewService(cfg *config.Config) *Service {
 func (s *Service) Start() error {
 	errChan := make(chan error)
 	go startHTTP(s.Config, errChan)
-	// go startGRPC(s.Config, errChan)
+	go startGRPC(s.Config, errChan)
 
 	return <-errChan
 }
@@ -106,11 +111,24 @@ func startHTTP(cfg *config.Config, errChan chan error) {
 		WriteTimeout:      10 * time.Second,
 		IdleTimeout:       15 * time.Second,
 	}
+	logs.Local().Infof("starting http server on port %d", cfg.Local.HTTPPort)
 	if err := srv.ListenAndServe(); err != nil {
 		errChan <- err
 	}
 }
 
 func startGRPC(cfg *config.Config, errChan chan error) {
-	errChan <- nil
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.Local.GRPCPort))
+	if err != nil {
+		errChan <- err
+	}
+	gs := grpc.NewServer()
+	reflection.Register(gs)
+	pb.RegisterPingServiceServer(gs, &ping.Server{
+		Config: cfg,
+	})
+	logs.Local().Infof("starting grpc server on port %d", cfg.Local.GRPCPort)
+	if err := gs.Serve(lis); err != nil {
+		errChan <- err
+	}
 }

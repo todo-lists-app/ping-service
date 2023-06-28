@@ -16,6 +16,11 @@ type Ping struct {
 	UserID string
 }
 
+type Result struct {
+	UserID string    `bson:"userid"`
+	Time   time.Time `bson:"time"`
+}
+
 func NewPingService(ctx context.Context, cfg config.Config, id string) *Ping {
 	return &Ping{
 		Config:  cfg,
@@ -73,14 +78,38 @@ func (p *Ping) pingExists() (bool, error) {
 		}
 	}()
 
-	ping := Ping{}
+	res := Result{}
 	if err := client.Database(p.Config.Mongo.Database).Collection(p.Config.Mongo.Collections.Ping).FindOne(p.Context, &bson.M{
 		"userid": p.UserID,
-	}).Decode(&ping); err != nil {
+	}).Decode(&res); err != nil {
 		if !errors.Is(err, mongo.ErrNoDocuments) {
 			return false, logs.Errorf("error finding ping: %v", err)
 		}
 		return false, nil
 	}
 	return true, nil
+}
+
+func (p *Ping) GetPing() (*Result, error) {
+	client, err := config.GetMongoClient(p.Context, p.Config)
+	if err != nil {
+		return nil, logs.Errorf("error getting mongo client: %v", err)
+	}
+	defer func() {
+		if err := client.Disconnect(p.Context); err != nil {
+			_ = logs.Errorf("error disconnecting mongo client: %v", err)
+		}
+	}()
+
+	res := Result{}
+	if err := client.Database(p.Config.Mongo.Database).Collection(p.Config.Mongo.Collections.Ping).FindOne(p.Context, &bson.M{
+		"userid": p.UserID,
+	}).Decode(&res); err != nil {
+		if !errors.Is(err, mongo.ErrNoDocuments) {
+			return &res, logs.Errorf("error finding ping: %v", err)
+		}
+		return &res, nil
+	}
+
+	return &res, nil
 }
