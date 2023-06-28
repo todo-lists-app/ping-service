@@ -15,11 +15,11 @@ ARG VERSION
 ARG SERVICE_NAME
 
 RUN go build -ldflags "-w -s -X main.BuildVersion=${VERSION} -X main.BuildHash=${BUILD} -X main.ServiceName=${SERVICE_NAME}" -o ./bin/service -v ./cmd/${SERVICE_NAME}/service.go
-RUN cp ./bin/service /
+#RUN cp ./bin/service /
 
 # Runner
 FROM scratch
-COPY --from=builder /home/builder/bin/service /bin/service
+COPY --from=builder /home/builder/bin/service /bin/
 EXPOSE 80 3000
 HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD ["/bin/service", "health"]
 CMD ["/bin/service", "start"]
