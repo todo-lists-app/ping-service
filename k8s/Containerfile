@@ -23,6 +23,8 @@ RUN apk update
 RUN apk upgrade
 RUN apk add ca-certificates && update-ca-certificates
 RUN apk add --update tzdata
+RUN cp /usr/share/zoneinfo/Europe/London /etc/localtime
+RUN echo "Europe/London" > /etc/timezone
 RUN rm -rf /var/cache/apk/*
 COPY --from=builder /service /bin/
 EXPOSE 80 3000

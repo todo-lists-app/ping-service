@@ -114,7 +114,7 @@ spec:
     - host: ping.todo-list.app
       http:
         paths:
-          - path: /ping(/|$)(.*)
+          - path: /v1(/|$)(.*)
             pathType: Prefix
             backend:
               service:
