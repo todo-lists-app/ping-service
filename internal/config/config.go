@@ -14,27 +14,27 @@ func Build() (*Config, error) {
 	cfg := &Config{}
 
 	if err := BuildLocal(cfg); err != nil {
-		return nil, err
+		return cfg, err
 	}
 
 	if err := BuildVault(cfg); err != nil {
-		return nil, err
+		return cfg, err
 	}
 
 	if err := BuildMongo(cfg); err != nil {
-		return nil, err
+		return cfg, err
 	}
 
 	if err := BuildIdentity(cfg); err != nil {
-		return nil, err
+		return cfg, err
 	}
 
 	if err := BuildPing(cfg); err != nil {
-		return nil, err
+		return cfg, err
 	}
 
 	if err := env.Parse(cfg); err != nil {
-		return nil, err
+		return cfg, err
 	}
 
 	return cfg, nil

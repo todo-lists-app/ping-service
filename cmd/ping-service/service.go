@@ -21,7 +21,7 @@ func main() {
 
 	cfg, err := config.Build()
 	if err != nil {
-		_ = logs.Local().Errorf("config: %v", err)
+		_ = logs.Local().Errorf("config: %+v, err: %v", cfg, err)
 		return
 	}
 
