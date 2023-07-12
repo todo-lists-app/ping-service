@@ -34,7 +34,7 @@ func (v *Validate) ValidateUser(userId, token string) (bool, error) {
 	g := pb.NewIdCheckerServiceClient(conn)
 	resp, err := g.CheckId(v.CTX, &pb.CheckIdRequest{
 		Id:          userId,
-		AccessToken: accessToken,
+		AccessToken: token,
 	})
 	if err != nil {
 		return false, err
