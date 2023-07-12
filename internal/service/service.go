@@ -2,15 +2,15 @@ package service
 
 import (
 	"fmt"
-	"github.com/bugfixes/go-bugfixes/logs"
 	"net"
 	"net/http"
 	"os"
 	"time"
 
-	"github.com/go-chi/chi/v5"
+	"github.com/bugfixes/go-bugfixes/logs"
+	chi "github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
-	"github.com/keloran/go-healthcheck"
+	healthcheck "github.com/keloran/go-healthcheck"
 	"github.com/todo-lists-app/ping-service/internal/config"
 	"github.com/todo-lists-app/ping-service/internal/ping"
 	"github.com/todo-lists-app/ping-service/internal/validate"
@@ -67,6 +67,7 @@ func startHTTP(cfg *config.Config, errChan chan error) {
 			"Content-Type",
 			"X-CSRF-Token",
 			"X-User-Subject",
+			"X-User-Access-Token",
 		},
 		MaxAge: 300,
 	}))
@@ -79,8 +80,14 @@ func startHTTP(cfg *config.Config, errChan chan error) {
 				w.WriteHeader(http.StatusUnauthorized)
 				return
 			}
+			token := r.Header.Get("X-User-Access-Token")
+			if token == "" {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+
 			v := validate.NewValidate(cfg, r.Context())
-			valid, err := v.ValidateUser(subject)
+			valid, err := v.ValidateUser(subject, token)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				errChan <- err
