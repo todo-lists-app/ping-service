@@ -51,7 +51,10 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
-          build-args: SERVICE_NAME=ping-service,VERSION=${{ github.ref_name }},BUILD=${{ github.sha }}
+          build-args: |
+            SERVICE_NAME=ping-service
+            VERSION=${{ github.ref_name }}
+            BUILD=${{ github.sha }}
 #  deploy:
 #    runs-on: ubuntu-latest
 #    needs: build
