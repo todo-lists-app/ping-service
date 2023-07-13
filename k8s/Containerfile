@@ -9,7 +9,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
-RUN rm .env
+RUN rm -f .env
 ARG BUILD
 ARG VERSION
 ARG SERVICE_NAME
