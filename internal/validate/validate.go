@@ -2,6 +2,7 @@ package validate
 
 import (
 	"context"
+	"github.com/bugfixes/go-bugfixes/logs"
 	"github.com/todo-lists-app/ping-service/internal/config"
 	pb "github.com/todo-lists-app/protobufs/generated/id_checker/v1"
 	"google.golang.org/grpc"
@@ -29,7 +30,12 @@ func (v *Validate) ValidateUser(userId, token string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	defer conn.Close()
+
+	defer func() {
+		if err := conn.Close(); err != nil {
+			logs.Infof("validate: %v", err)
+		}
+	}()
 
 	g := pb.NewIdCheckerServiceClient(conn)
 	resp, err := g.CheckId(v.CTX, &pb.CheckIdRequest{
