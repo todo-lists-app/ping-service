@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/bugfixes/go-bugfixes/logs"
-	chi "github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
-	healthcheck "github.com/keloran/go-healthcheck"
+	"github.com/keloran/go-healthcheck"
 	"github.com/todo-lists-app/ping-service/internal/config"
 	"github.com/todo-lists-app/ping-service/internal/ping"
 	"github.com/todo-lists-app/ping-service/internal/validate"

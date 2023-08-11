@@ -29,14 +29,14 @@ type Mongo struct {
 
 // BuildMongo builds the Mongo config
 func BuildMongo(c *Config) error {
-	mongo := &Mongo{}
+	mungo := &Mongo{}
 
-	if err := env.Parse(mongo); err != nil {
+	if err := env.Parse(mungo); err != nil {
 		return err
 	}
 
 	v := vh.NewVault(c.Vault.Address, c.Vault.Token)
-	if err := v.GetSecrets(mongo.Vault.Path); err != nil {
+	if err := v.GetSecrets(mungo.Vault.Path); err != nil {
 		return err
 	}
 
@@ -50,11 +50,11 @@ func BuildMongo(c *Config) error {
 		return err
 	}
 
-	mongo.Vault.ExpireTime = time.Now().Add(time.Duration(v.LeaseDuration) * time.Second)
-	mongo.Password = password
-	mongo.Username = username
+	mungo.Vault.ExpireTime = time.Now().Add(time.Duration(v.LeaseDuration) * time.Second)
+	mungo.Password = password
+	mungo.Username = username
 
-	c.Mongo = *mongo
+	c.Mongo = *mungo
 
 	return nil
 }
