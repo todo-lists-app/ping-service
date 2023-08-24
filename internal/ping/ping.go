@@ -35,13 +35,13 @@ func (r *RealMongoOperations) Disconnect(ctx context.Context) error {
 	return r.Client.Disconnect(ctx)
 }
 func (r *RealMongoOperations) InsertOne(ctx context.Context, document interface{}) (interface{}, error) {
-	return r.Client.Database("ping").Collection("ping").InsertOne(ctx, document)
+	return r.Client.Database("todo").Collection("ping").InsertOne(ctx, document)
 }
 func (r *RealMongoOperations) UpdateOne(ctx context.Context, filter interface{}, update interface{}) (interface{}, error) {
-	return r.Client.Database("ping").Collection("ping").UpdateOne(ctx, filter, update)
+	return r.Client.Database("todo").Collection("ping").UpdateOne(ctx, filter, update)
 }
 func (r *RealMongoOperations) FindOne(ctx context.Context, filter interface{}) *mongo.SingleResult {
-	return r.Client.Database("ping").Collection("ping").FindOne(ctx, filter)
+	return r.Client.Database("todo").Collection("ping").FindOne(ctx, filter)
 }
 
 type Ping struct {
@@ -107,11 +107,6 @@ func (p *Ping) pingExists() (bool, error) {
 	if err := p.MongoOps.GetMongoClient(p.Context, p.Config.Mongo); err != nil {
 		return false, logs.Errorf("error getting mongo client: %v", err)
 	}
-	defer func() {
-		if err := p.MongoOps.Disconnect(p.Context); err != nil {
-			_ = logs.Errorf("error disconnecting mongo client: %v", err)
-		}
-	}()
 
 	res := Result{}
 	if err := p.MongoOps.FindOne(p.Context, &bson.M{
@@ -129,11 +124,6 @@ func (p *Ping) GetPing() (*Result, error) {
 	if err := p.MongoOps.GetMongoClient(p.Context, p.Config.Mongo); err != nil {
 		return nil, logs.Errorf("error getting mongo client: %v", err)
 	}
-	defer func() {
-		if err := p.MongoOps.Disconnect(p.Context); err != nil {
-			_ = logs.Errorf("error disconnecting mongo client: %v", err)
-		}
-	}()
 
 	res := Result{}
 	if err := p.MongoOps.FindOne(p.Context, &bson.M{

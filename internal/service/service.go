@@ -78,11 +78,13 @@ func startHTTP(cfg *config.Config, errChan chan error) {
 			subject := r.Header.Get("X-User-Subject")
 			if subject == "" {
 				w.WriteHeader(http.StatusUnauthorized)
+				logs.Infof("no subject: %+v", r)
 				return
 			}
 			token := r.Header.Get("X-User-Access-Token")
 			if token == "" {
 				w.WriteHeader(http.StatusUnauthorized)
+				logs.Infof("no token: %+v", r)
 				return
 			}
 
@@ -90,17 +92,20 @@ func startHTTP(cfg *config.Config, errChan chan error) {
 			valid, err := v.ValidateUser(token, subject)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
+				logs.Infof("validate err: %+v", err)
 				errChan <- err
 				return
 			}
 			if !valid {
 				w.WriteHeader(http.StatusUnauthorized)
+				logs.Info("not valid")
 				return
 			}
 
 			p := ping.NewPingService(r.Context(), *cfg, subject, &ping.RealMongoOperations{})
 			if err := p.Ping(); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
+				logs.Infof("ping err: %+v", err)
 				errChan <- err
 				return
 			}

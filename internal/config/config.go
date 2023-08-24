@@ -22,7 +22,7 @@ func Build() (*Config, error) {
 		return cfg, logs.Errorf("buildping: %v", err)
 	}
 
-	conf, err := ConfigBuilder.Build()
+	conf, err := ConfigBuilder.Build(ConfigBuilder.Vault, ConfigBuilder.Mongo)
 	if err != nil {
 		return cfg, logs.Errorf("configbuilder: %v", err)
 	}
