@@ -1,41 +1,32 @@
 package config
 
-import "github.com/caarlos0/env/v8"
+import (
+	"github.com/bugfixes/go-bugfixes/logs"
+	ConfigBuilder "github.com/keloran/go-config"
+)
 
 type Config struct {
-	Local
-	Vault
-	Mongo
 	Identity
 	Ping
+	ConfigBuilder.Config
 }
 
 func Build() (*Config, error) {
 	cfg := &Config{}
 
-	if err := BuildLocal(cfg); err != nil {
-		return cfg, err
-	}
-
-	if err := BuildVault(cfg); err != nil {
-		return cfg, err
-	}
-
-	if err := BuildMongo(cfg); err != nil {
-		return cfg, err
-	}
-
 	if err := BuildIdentity(cfg); err != nil {
-		return cfg, err
+		return cfg, logs.Errorf("buildidentity: %v", err)
 	}
 
 	if err := BuildPing(cfg); err != nil {
-		return cfg, err
+		return cfg, logs.Errorf("buildping: %v", err)
 	}
 
-	if err := env.Parse(cfg); err != nil {
-		return cfg, err
+	conf, err := ConfigBuilder.Build()
+	if err != nil {
+		return cfg, logs.Errorf("configbuilder: %v", err)
 	}
+	cfg.Config = *conf
 
 	return cfg, nil
 }
