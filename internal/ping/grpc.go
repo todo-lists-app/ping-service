@@ -13,7 +13,7 @@ type Server struct {
 }
 
 func (s *Server) Ping(ctx context.Context, r *pb.LastUserPingRequest) (*pb.PingResponse, error) {
-	p := NewPingService(ctx, *s.Config, r.GetUserId())
+	p := NewPingService(ctx, *s.Config, r.GetUserId(), &RealMongoOperations{})
 	ping, err := p.GetPing()
 	if err != nil {
 		return &pb.PingResponse{

@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	validate "github.com/todo-lists-app/go-validate-user"
 	"net"
 	"net/http"
 	"os"
@@ -13,7 +14,6 @@ import (
 	"github.com/keloran/go-healthcheck"
 	"github.com/todo-lists-app/ping-service/internal/config"
 	"github.com/todo-lists-app/ping-service/internal/ping"
-	"github.com/todo-lists-app/ping-service/internal/validate"
 	pb "github.com/todo-lists-app/protobufs/generated/ping/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -86,7 +86,7 @@ func startHTTP(cfg *config.Config, errChan chan error) {
 				return
 			}
 
-			v := validate.NewValidate(cfg, r.Context())
+			v, err := validate.NewValidate(r.Context(), cfg.Identity.Service, cfg.Local.Development).GetClient()
 			valid, err := v.ValidateUser(subject, token)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
@@ -98,7 +98,7 @@ func startHTTP(cfg *config.Config, errChan chan error) {
 				return
 			}
 
-			p := ping.NewPingService(r.Context(), *cfg, subject)
+			p := ping.NewPingService(r.Context(), *cfg, subject, &ping.RealMongoOperations{})
 			if err := p.Ping(); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				errChan <- err

@@ -46,7 +46,7 @@ spec:
                 secretKeyRef:
                   name: ping-service-secrets
                   key: vault-token
-            - name: MONGO_PING_COLLECTION
+            - name: MONGO_COLLECTION_PING
               valueFrom:
                 secretKeyRef:
                   name: ping-service-secrets
