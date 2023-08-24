@@ -87,7 +87,7 @@ func startHTTP(cfg *config.Config, errChan chan error) {
 			}
 
 			v, err := validate.NewValidate(r.Context(), cfg.Identity.Service, cfg.Local.Development).GetClient()
-			valid, err := v.ValidateUser(subject, token)
+			valid, err := v.ValidateUser(token, subject)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				errChan <- err
