@@ -28,6 +28,6 @@ RUN echo "Europe/London" > /etc/timezone
 RUN rm -rf /var/cache/apk/*
 COPY --from=builder /service /bin/
 EXPOSE 80 3000
-HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD ["/bin/service", "health"]
+HEALTHCHECK --interval=5s --timeout=2s --retries=12 CMD curl --silent --fail localhost/probe || exit 1
 CMD ["/bin/service", "start"]
 
