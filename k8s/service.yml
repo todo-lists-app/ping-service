@@ -31,10 +31,9 @@ spec:
           image: containers.chewed-k8s.net/todo-list/ping-service:latest
           imagePullPolicy: Always
           readinessProbe:
-            exec:
-              command:
-                - /bin/service
-                - health
+            httpGet:
+              path: /health
+              port: 80
           ports:
             - containerPort: 3000
               name: grpc
