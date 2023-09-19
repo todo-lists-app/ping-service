@@ -35,8 +35,8 @@ require (
 	github.com/hashicorp/go-secure-stdlib/strutil v0.1.2 // indirect
 	github.com/hashicorp/go-sockaddr v1.0.2 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-5 // indirect
-	github.com/hashicorp/vault/api v1.9.2 // indirect
-	github.com/keloran/vault-helper v0.7.0 // indirect
+	github.com/hashicorp/vault/api v1.10.0 // indirect
+	github.com/keloran/vault-helper v0.8.0 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
