@@ -10,9 +10,9 @@ require (
 	github.com/hashicorp/vault/sdk v0.9.2
 	github.com/keloran/go-config v0.3.0
 	github.com/keloran/go-healthcheck v1.2.1
-	github.com/keloran/vault-helper v0.7.0
 	github.com/stretchr/testify v1.8.4
-	github.com/todo-lists-app/protobufs v0.1.0
+	github.com/todo-lists-app/go-validate-user v0.1.0
+	github.com/todo-lists-app/protobufs v0.1.2
 	go.mongodb.org/mongo-driver v1.12.1
 	google.golang.org/grpc v1.57.0
 )
@@ -36,13 +36,13 @@ require (
 	github.com/hashicorp/go-sockaddr v1.0.2 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-5 // indirect
 	github.com/hashicorp/vault/api v1.9.2 // indirect
+	github.com/keloran/vault-helper v0.7.0 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
-	github.com/todo-lists-app/go-validate-user v0.1.0 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
