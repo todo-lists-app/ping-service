@@ -43,7 +43,9 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    needs: test
+    needs:
+      - test
+      - qodana
     steps:
       - uses: fastify/github-action-merge-dependabot@v3
         with:
