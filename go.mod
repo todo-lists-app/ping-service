@@ -8,7 +8,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.10
 	github.com/go-chi/cors v1.2.1
 	github.com/hashicorp/vault/sdk v0.10.2
-	github.com/keloran/go-config v0.4.0
+	github.com/keloran/go-config v0.4.1
 	github.com/keloran/go-healthcheck v1.2.1
 	github.com/stretchr/testify v1.8.4
 	github.com/todo-lists-app/go-validate-user v0.1.1
