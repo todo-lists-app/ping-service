@@ -7,7 +7,7 @@ require (
 	github.com/caarlos0/env/v8 v8.0.0
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-chi/cors v1.2.1
-	github.com/hashicorp/vault/sdk v0.11.0
+	github.com/hashicorp/vault/sdk v0.11.1
 	github.com/keloran/go-config v0.5.1
 	github.com/keloran/go-healthcheck v1.2.1
 	github.com/stretchr/testify v1.9.0
@@ -38,6 +38,7 @@ require (
 	github.com/hashicorp/vault/api v1.12.0 // indirect
 	github.com/keloran/vault-helper v0.8.2 // indirect
 	github.com/klauspost/compress v1.17.7 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
