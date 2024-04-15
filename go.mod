@@ -1,6 +1,7 @@
 module github.com/todo-lists-app/ping-service
 
 go 1.21
+toolchain go1.22.1
 
 require (
 	github.com/bugfixes/go-bugfixes v0.10.0
@@ -9,7 +10,7 @@ require (
 	github.com/go-chi/cors v1.2.1
 	github.com/hashicorp/vault/sdk v0.12.0
 	github.com/keloran/go-config v0.5.1
-	github.com/keloran/go-healthcheck v1.2.1
+	github.com/keloran/go-healthcheck v1.2.2
 	github.com/stretchr/testify v1.9.0
 	github.com/todo-lists-app/go-validate-user v0.1.2
 	github.com/todo-lists-app/protobufs v0.1.2
