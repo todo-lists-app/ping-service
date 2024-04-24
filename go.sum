@@ -60,8 +60,8 @@ github.com/hashicorp/vault/api v1.12.0 h1:meCpJSesvzQyao8FCOgk2fGdoADAnbDu2WPJN1
 github.com/hashicorp/vault/api v1.12.0/go.mod h1:si+lJCYO7oGkIoNPAN8j3azBLTn9SjMGS+jFaHd1Cck=
 github.com/hashicorp/vault/sdk v0.12.0 h1:c2WeMWtF08zKQmrJya7paM4IVnsXIXF5UlhQTBdwZwQ=
 github.com/hashicorp/vault/sdk v0.12.0/go.mod h1:2kN1F5owc/Yh1OwL32GGnYrX9E3vFOIKA/cGJxCNQ30=
-github.com/keloran/go-config v0.5.1 h1:yvIoZm9EXcNx7WX5qqX6f+Ia9mI+6BB86LVkeSSDF3w=
-github.com/keloran/go-config v0.5.1/go.mod h1:0LeMbGSsaJHLIvuHZy4E/ZsJHXdLqX6aXJHmn0UvLQo=
+github.com/keloran/go-config v0.5.2 h1:qpwbvmit2qkkIZTQUoVTWKpIWUhm/iTD5WvSmZWujaU=
+github.com/keloran/go-config v0.5.2/go.mod h1:bMruDoZL0wC+SwD/KmS1mKkvpdGtmrFx2HwjW45gdWg=
 github.com/keloran/go-healthcheck v1.2.1 h1:BmqjL0HOsIY5YYm74l28gpds1lzhR/tlEVBN4YoiWR4=
 github.com/keloran/go-healthcheck v1.2.1/go.mod h1:Cwa0dsTKUH7r4JgiF5Ho4pWDgvYat3nSm8owc0cyRAw=
 github.com/keloran/vault-helper v0.8.2 h1:Nmsb3XAhuaLQRv+LirOTSjdv6WcJuqNK+7xnOLAa+ME=
